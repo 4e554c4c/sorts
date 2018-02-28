@@ -1,22 +1,26 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "include/randarr.h"
 
 void merge(uint32_t a[], uint32_t aux[], int lo, int mid, int hi) {
+	// Copy from a to aux
+	memcpy(&aux[lo],&a[lo], (1+hi-lo)*sizeof(uint32_t));
+
 	int i = lo, j = mid+1;
 	for (int k = lo; k <= hi; ++k) {
 		if (i > mid) {
-			aux[k] = a[j++];
+			a[k] = aux[j++];
 		}
 		else if (j > hi) {
-			aux[k] = a[i++];
+			a[k] = aux[i++];
 		}
-		else if (a[j] < a[i]) {
-			aux[k] = a[j++];
+		else if (aux[j] < aux[i]) {
+			a[k] = aux[j++];
 		} else {
-			aux[k] = a[i++];
+			a[k] = aux[i++];
 		}
 	}
+
 }
 
 void sort(uint32_t a[], uint32_t aux[], int lo, int hi) {
@@ -25,14 +29,15 @@ void sort(uint32_t a[], uint32_t aux[], int lo, int hi) {
 	}
 	int mid = (lo+hi) / 2;
 	//swap aux and a
-	sort (aux, a, lo, mid);
-	sort (aux, a, mid+1, hi);
-	merge(aux, a, lo, mid, hi);
+	sort (a, aux, lo, mid);
+	sort (a, aux, mid+1, hi);
+	merge(a, aux, lo, mid, hi);
 }
 
 int main() {
 	sort(random_array, scrap_array, 0, size-1);
 
+#ifdef DEBUG
 	// Now print the array for testing :)
 	puts("arr:\t{");
 	for (int i = 0; i < size; ++i) {
@@ -42,5 +47,6 @@ int main() {
 		printf("%u,", random_array[i]);
 	}
 	puts("};\n");
+#endif
 	return 0;
 }

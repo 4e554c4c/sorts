@@ -16,7 +16,7 @@ quicksort: quicksort.c | bin/randarr.o bin
 
 bin/randarr.o: gen_arr | bin
 	@rm -f ./bin/randarr.asm
-	@./bin/gen_arr 10000 > bin/randarr.asm
+	@./bin/gen_arr 1000000 > bin/randarr.asm
 	@nasm -felf64 bin/randarr.asm -o bin/randarr.o
 
 gen_arr: gen_arr.c | bin
