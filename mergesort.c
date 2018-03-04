@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "include/randarr.h"
 
@@ -35,6 +36,7 @@ void sort(uint32_t a[], uint32_t aux[], int lo, int hi) {
 }
 
 int main() {
+	uint32_t *scrap_array = malloc(sizeof(uint32_t) * size);
 	sort(random_array, scrap_array, 0, size-1);
 
 #ifdef DEBUG

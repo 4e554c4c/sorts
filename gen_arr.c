@@ -26,18 +26,13 @@ int main(int argc, char **argv) {
 	uint32_t *rand_arr = calloc(sizeof(uint32_t), buff_size);
 	assert(rand_arr);
 
-	printf("section .bss\n"           \
-		"align 4\n"               \
-		"global _scrap_array\n"    \
-		"_scrap_array:\n"          \
-		"\tresd %d\n"             \
-		"section .data\n"         \
+	printf("section .data\n"          \
 		"align 4\n"               \
 		"global size\n"           \
 		"size:\n"                 \
 		"\tdd %d\n"               \
-		"global _random_array\n"   \
-		"_random_array:", num_items, num_items);
+		"global _random_array\n"  \
+		"_random_array:", num_items);
 	for (int i = 0; i < num_items; ++i) {
 		if ((i%buff_size) == 0) {
 			assert(read(fd, rand_arr, sizeof(uint32_t) * buff_size) > 0);

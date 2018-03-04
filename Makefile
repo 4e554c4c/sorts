@@ -1,4 +1,4 @@
-CFLAGS := -Wall -Werror -O0 -ggdb
+CFLAGS := -Wall -Werror -O3 -ggdb
 LFLAGS :=
 
 .PHONY: all run clean
