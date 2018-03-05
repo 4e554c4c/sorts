@@ -1,30 +1,34 @@
-CFLAGS := -Wall -Werror -O3 -ggdb
-LFLAGS :=
+CC ?= gcc
+LFLAGS ?=
+CFLAGS ?= -Wall -Werror $(LFLAGS)
 
-.PHONY: all run clean
+sorts := heapsort quicksort mergesort
+sort_executables := $(sorts:%=bin/%)
 
-all: heapsort mergesort quicksort
+.PHONY: all debug
 
-heapsort: heapsort.c | bin/randarr.o bin
-	@gcc -o bin/heapsort $(CFLAGS) $(LFLAGS) heapsort.c bin/randarr.o
+all: CFLAGS += -O3
+all: $(sort_executables)
 
-mergesort: mergesort.c | bin/randarr.o bin
-	@gcc -o bin/mergesort $(CFLAGS) $(LFLAGS) mergesort.c bin/randarr.o
+debug: CFLAGS += -O0 -DDEBUG -ggdb
+debug: $(sort_executables)
 
-quicksort: quicksort.c | bin/randarr.o bin
-	@gcc -o bin/quicksort $(CFLAGS) $(LFLAGS) quicksort.c bin/randarr.o
+bin/gen_arr: gen_arr.c | bin
+	$(CC) -o bin/gen_arr $(CFLAGS) $(LFLAGS) gen_arr.c
 
-bin/randarr.o: gen_arr | bin
-	@rm -f ./bin/randarr.asm
-	@./bin/gen_arr 1000000 > bin/randarr.asm
-	@nasm -felf64 bin/randarr.asm -o bin/randarr.o
+bin/randarr.o: | bin/gen_arr bin
+	rm -f ./bin/randarr.asm
+	./bin/gen_arr 10000000 > bin/randarr.asm
+	nasm -felf64 bin/randarr.asm -o bin/randarr.o
 
-gen_arr: gen_arr.c | bin
-	@mkdir -p bin
-	@gcc -o bin/gen_arr $(CFLAGS) $(LFLAGS) gen_arr.c
+bin/%: %.c | bin/randarr.o bin
+	$(CC) -o $@ $< $(CFLAGS) bin/randarr.o
 
 bin:
 	@mkdir bin
+
+mostlyclean:
+	@rm -f $(sort_executables)
 
 clean:
 	@rm -rf bin
