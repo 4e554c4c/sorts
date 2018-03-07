@@ -2,7 +2,7 @@ CC ?= gcc
 LFLAGS ?=
 CFLAGS ?= -Wall -Werror $(LFLAGS)
 
-sorts := heapsort quicksort mergesort
+sorts := heapsort quicksort mergesort insertionsort quicksortX mergesortX
 sort_executables := $(sorts:%=bin/%)
 
 .PHONY: all debug
@@ -18,7 +18,7 @@ bin/gen_arr: gen_arr.c | bin
 
 bin/randarr.o: | bin/gen_arr bin
 	rm -f ./bin/randarr.asm
-	./bin/gen_arr 10000000 > bin/randarr.asm
+	./bin/gen_arr 100000 > bin/randarr.asm
 	nasm -felf64 bin/randarr.asm -o bin/randarr.o
 
 bin/%: %.c | bin/randarr.o bin

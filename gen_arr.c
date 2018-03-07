@@ -10,8 +10,7 @@
 #include <unistd.h>
 
 /**
- * Write an assembly file containing a random array. Also provide a scrap array
- * for mergesort
+ * Write an assembly file containing a random array.
  */
 int main(int argc, char **argv) {
 	if (argc != 2|| strcmp(argv[1], "-h") == 0) {
